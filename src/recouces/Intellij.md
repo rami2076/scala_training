@@ -26,6 +26,6 @@ ProjectViewの歯車をクリックし、Auto Scroll to Source をクリック�
 ProjectViewの歯車をクリックし、Auto Scroll from Source をクリックしてonにする
 
 ### Ref
-[https://qiita.com/pipi_taro/items/859d445960bb79a3ac78](https://qiita.com/pipi_taro/items/859d445960bb79a3ac78)
-
+- [IntelliJの使い方](https://qiita.com/pipi_taro/items/859d445960bb79a3ac78)
+- [Github連携](https://qiita.com/rubytomato@github/items/b2ca27712146ed6f1426)
  
