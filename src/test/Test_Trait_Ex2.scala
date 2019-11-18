@@ -32,7 +32,7 @@ object Test_Trait_Ex2 extends App {
 
   //型のキャスト可能
   val trait_Ex2_1_instance_b: Trait_Ex2_1 = trait_Ex2_1_instance
-  trait_Ex2_1_instance_b.e
+  trait_Ex2_1_instance_b.en
   trait_Ex2_1_instance_b.state
   trait_Ex2_1_instance_b.jp
   trait_Ex2_1_instance_b.fr
