@@ -12,9 +12,9 @@ object Trait_Ex5 extends App {
   //上記は、override修飾子を付与したことで解決されている。
 
   val a = new ClassA_Ex5
-
   a.greet()
 
+  println("-----------")
 
   val b = new ClassB_Ex5
   //継承順序を逆にすると呼び出される関数が変更される。
