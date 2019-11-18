@@ -8,7 +8,7 @@ package tutorial
 
 object Trait_Ex6 extends App {
 
-  //もう少し検証する必要がある
+  //すべてのtraitにsuperがあると親クラスからのメソッドが順に呼び出しされる。
 
   //superキーワードを使用することで親traitの関数を使用することもできる
   val a = new ClassA_Ex6
@@ -27,14 +27,14 @@ trait TraitA_Ex6 {
 trait TraitB_Ex6 extends TraitA_Ex6 {
   override def greet() = {
     super.greet()
-    println("Good morning!")
+    println("B_Good morning!")
   }
 }
 
 trait TraitC_Ex6 extends TraitA_Ex6 {
   override def greet() = {
     super.greet()
-    println("Good evening!")
+    println("C_Good evening!")
 
   }
 }
