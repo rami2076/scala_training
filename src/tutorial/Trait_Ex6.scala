@@ -45,4 +45,15 @@ class ClassA_Ex6 extends TraitB_Ex6 with TraitC_Ex6
 class ClassB_Ex6 extends TraitC_Ex6 with TraitB_Ex6
 
 
+/*
+実行結果
+Hello!
+B_Good morning!
+C_Good evening!
+-----------
+Hello!
+C_Good evening!
+B_Good morning!
 
+Process finished with exit code 0
+ */

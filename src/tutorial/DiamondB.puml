@@ -1,0 +1,28 @@
+@startuml
+
+title Diamond B
+
+interface TraitA_Ex6 {
+ Unit +greet()
+}
+interface TraitB_Ex6 {
+ override Unit +greet()
+}
+interface TraitC_Ex6{
+ override Unit +greet()
+}
+
+TraitB_Ex6 <|-- TraitA_Ex6
+TraitC_Ex6 <|-- TraitA_Ex6
+
+class ClassB_Ex6
+
+
+
+
+ClassB_Ex6 <|-- TraitC_Ex6
+ClassB_Ex6 <|-- TraitB_Ex6
+
+note top of ClassB_Ex6:class ClassB_Ex6 extends TraitC_Ex6 with TraitB_Ex6
+
+@enduml

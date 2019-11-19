@@ -1,0 +1,29 @@
+@startuml
+
+title Diamond A Linearization
+
+interface TraitA_Ex6 {
+ Unit +greet()
+}
+interface TraitB_Ex6 {
+ override Unit +greet()
+}
+interface TraitC_Ex6{
+ override Unit +greet()
+}
+
+class ClassA_Ex6
+
+note top of ClassA_Ex6:class ClassA_Ex6 extends TraitB_Ex6 with TraitC_Ex6
+note "TraitC_Ex6 implements TraitA_Ex6." as N1
+note "TraitB_Ex6 implements TraitA_Ex6." as N2
+
+
+ClassA_Ex6 <|- TraitC_Ex6
+
+TraitC_Ex6 <|- TraitB_Ex6
+
+TraitB_Ex6 <|- TraitA_Ex6
+
+
+@enduml
