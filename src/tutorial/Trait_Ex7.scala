@@ -30,12 +30,12 @@ trait Trait_Ex7_A {
 
 //override
 //子trait コンパイルが通らない。
-trait Trait_Ex7_Child_B extends Trait_Ex7_A {
-  override def greet(): Unit = {
-    super.greet()
-    println("Good morning!")
-  }
-}
+//trait Trait_Ex7_Child_B extends Trait_Ex7_A {
+//  override def greet(): Unit = {
+//    super.greet()
+//    println("Good morning!")
+//  }
+//}
 
 //abstract override
 //子trait　コンパイルが通る

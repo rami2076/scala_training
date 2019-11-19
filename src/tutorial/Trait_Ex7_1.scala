@@ -31,7 +31,7 @@ trait Trait_Ex7_Child_C_1 extends Trait_Ex7_A_1 {
 }
 
 //コンパイルエラー
-class Class_Ex7_Child_A_1 extends Trait_Ex7_Child_C_1
+//class Class_Ex7_Child_A_1 extends Trait_Ex7_Child_C_1
 
 //エラーメッセージ
 //Class 'Class_Ex7_Child_A_1' needs to be mixin, since member 'greet'
