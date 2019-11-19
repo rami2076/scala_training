@@ -5,6 +5,8 @@ package tutorial
   *
   * 線形化
   * linearization
+  * "線形化によるトレイトの積み重ねの処理をScalaの用語では積み重ね可能なトレイト（Stackable Trait）と呼ぶことがあります。"
+  * http://dwango.github.io/scala_text_previews/sbt-tut/trait.html
   */
 
 object Trait_Ex5 extends App {

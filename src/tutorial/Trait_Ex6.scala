@@ -1,7 +1,7 @@
 package tutorial
 
 /**
-  * 線形化の補足
+  * 線形化の補足(優先度の確認)
   *
   * linearization
   */
