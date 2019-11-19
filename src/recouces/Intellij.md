@@ -24,8 +24,13 @@ Editor>>General
 ProjectViewの歯車をクリックし、Auto Scroll to Source をクリックしてonにする
 ## エディターで開いているファイルをProjectViewで強調
 ProjectViewの歯車をクリックし、Auto Scroll from Source をクリックしてonにする
+## なんでも検索window
+shift + shift
+## 最終的な型情報表示(Type Info)
+知りたい処理を選択してalt + =
 
 ### Ref
 - [IntelliJの使い方](https://qiita.com/pipi_taro/items/859d445960bb79a3ac78)
 - [Github連携](https://qiita.com/rubytomato@github/items/b2ca27712146ed6f1426)
- 
+- [忙しい人のためのIntellijショートカット](https://qiita.com/yoppe/items/f7cbeb825c071691d3f2)
+- [Type Info Shortcut](https://qiita.com/harry0000/items/8818c862642407c2b904)
