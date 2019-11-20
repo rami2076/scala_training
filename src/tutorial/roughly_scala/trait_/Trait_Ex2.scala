@@ -1,4 +1,4 @@
-package tutorial.roughly_scala
+package tutorial.roughly_scala.trait_
 
 //ref:http://dwango.github.io/scala_text_previews/sbt-tut/trait.html
 

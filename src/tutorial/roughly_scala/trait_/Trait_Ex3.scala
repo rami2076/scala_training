@@ -1,4 +1,5 @@
-package tutorial.roughly_scala
+package tutorial.roughly_scala.trait_
+
 
 //引数を持たせるとコンパイルエラーになる。
 //コンストラクタも持てない。->インスタンス化できない。

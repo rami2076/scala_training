@@ -1,6 +1,6 @@
 package test.roughly_scala.trait_
 
-import tutorial.roughly_scala.{Trait_Ex2, Trait_Ex2_1}
+import tutorial.roughly_scala.trait_.{Trait_Ex2, Trait_Ex2_1}
 
 object Test_Trait_Ex2 extends App {
 
