@@ -1,4 +1,4 @@
-package test.roughly_scala.`trait`
+package test.roughly_scala.trait_
 
 import tutorial.roughly_scala.{Trait_Ex2, Trait_Ex2_1}
 
