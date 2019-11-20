@@ -1,4 +1,5 @@
-package tutorial.roughly_scala
+package tutorial.roughly_scala.trait_
+
 
 /**
   * 線形化の補足(優先度の確認)

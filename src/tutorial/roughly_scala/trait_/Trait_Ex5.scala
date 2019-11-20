@@ -1,4 +1,5 @@
-package tutorial.roughly_scala
+package tutorial.roughly_scala.trait_
+
 
 /**
   * 菱形継承問題の解決2

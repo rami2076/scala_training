@@ -1,4 +1,5 @@
-package tutorial.roughly_scala
+package tutorial.roughly_scala.trait_
+
 
 /**
   *
