@@ -44,7 +44,7 @@ object Map_Ex2 extends App {
 
 }
 
-
+//FIXME::引数を二つまで絞り込めるのでは？その場合Either使えるのでは？
 class ThisIsMapaaa[ A <: Any, B <: Any ](any: (Option[ Map[ A, B ] ], Option[ scala.collection.Map[ A, B ] ], Option[ AnyRef ])) {
 
 
