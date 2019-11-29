@@ -5,10 +5,22 @@ import java.util.{HashMap => UHashMap, Map => UMap}
 import scala.collection.mutable.{HashMap => MHashMap, LongMap => MLongMap, Map => MMap}
 import scala.collection.{Map => SMap}
 
-object GenericsForMap_Check extends App {
+/**
+  *
+  *
+  * 第三段の疑問点を確認。
+  * テストコードが無いから正しいことを確認できないが一旦classを渡して冗長性を排除できた。
+  * 性能試験を行うためのコードを第三段に記述すること
+  *
+  * テストコードが無いため記述の確からしさを確認できていない。確認すること。
+  *
+  */
 
+object GenericsForMap_Check extends App {
+  //PUT GETの法則に反していないか？
+  //ジェネリクスはもっと完結にできないか？
   val a = new CC[ Map[ Long, Long ], Long, Long ](classOf[ Map[ Long, Long ] ])
-  val b = new CC[ MHashMap[ Long, Long ], Any, Any ](classOf[ MHashMap[ Long, Long ] ])
+  val b = new CC[ MHashMap[ Long, Long ], Long, Long ](classOf[ MHashMap[ Long, Long ] ])
   val c = new CC[ MLongMap[ Long ], Long, Long ](classOf[ MLongMap[ Long ] ])
   val d = new CC[ UMap[ Long, Long ], Long, Long ](classOf[ UMap[ Long, Long ] ])
 

@@ -13,8 +13,14 @@ import scala.collection.mutable
   * 通常のエントリーは100万も格納されることないため速度を求められる場合はjavaのhashMapを使用することが望ましい
   * 100万を超えるエントリーを扱うようなMapを使用する場合は、LongMapを使用する方が効率的だが、LongMapをの使用を検討する前にアルゴリズムや方式の見直しをするべき。
   *
+  * 下記2クラスは遅い。　
+  * scala.collection.immutable.HashMap
+  * scala.collection.Map
   *
+  * 性能チェック第一弾
   *
+  * 試行回数の平均を求めていない。
+  * 冗長なコードが多くみられる。
   *
   *
   */

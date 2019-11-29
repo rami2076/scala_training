@@ -1,3 +1,14 @@
+
+/**
+  *
+  *
+  * 第三段
+  * 第二弾の改良を行おうとするが、Classを引数に渡す方法がJavaと異なり、一旦確認をclassを渡す方法を確認する
+  *
+  *
+  */
+
+
 //
 //package tutorial.roughly_scala.base.collection_.map_
 //

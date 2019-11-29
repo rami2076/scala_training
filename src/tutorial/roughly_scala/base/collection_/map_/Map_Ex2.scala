@@ -1,6 +1,21 @@
 
 package tutorial.roughly_scala.base.collection_.map_
 
+/**
+  *
+  *
+  * 第一弾の記述に冗長が存在したため整理
+  * 計測まで行うこと。。
+  *
+  *
+  * 第二弾
+  * Optionで引数を渡すコードに冗長なコードあり。
+  * 記述の改善の必要性を感じる。
+  *
+  *
+  *
+  *
+  */
 
 object Map_Ex2 extends App {
   //val maxes: Array[ Long ] = Array(10L, 100L, 1000L, 10000L, 100000L, 1000000L)
@@ -30,7 +45,7 @@ object Map_Ex2 extends App {
 }
 
 
-class ThisIsMapaaa[ A <: Any, B <: Any](any: (Option[ Map[ A, B ] ], Option[ scala.collection.Map[ A, B ] ], Option[ AnyRef ])) {
+class ThisIsMapaaa[ A <: Any, B <: Any ](any: (Option[ Map[ A, B ] ], Option[ scala.collection.Map[ A, B ] ], Option[ AnyRef ])) {
 
 
   private var thisMap = {
