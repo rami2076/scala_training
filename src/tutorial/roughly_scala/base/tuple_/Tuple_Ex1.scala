@@ -1,4 +1,4 @@
-package tutorial.roughly_scala.base.tuple
+package tutorial.roughly_scala.base.tuple_
 
 /**
   *
