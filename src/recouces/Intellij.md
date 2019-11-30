@@ -15,9 +15,12 @@ ctl + shift + a
 ctl + shift + a　-> split
 ## import
 対象のクラスにカーソルを合わせ alt + Enter
-## auto import
+## auto imports 自動インポート
 ctl + alt + s  
-Editor>>General
+Editor>>General  
+[-] **unambiguous imports**にチェック
+## Optimize imports インポートの最適化(不要なインポートの削除の自動実行)
+[ ] **unambiguous imports**のチェックを外す
 ## scala doc
 付与したい定義名にカーソルを合わせて ctl + alt + q
 ## ProjectViewで選択したファイルをエディターで表示

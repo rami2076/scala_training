@@ -18,7 +18,7 @@ import scala.collection.mutable
   * scala.collection.Map
   *
   * 性能チェック第一弾
-  *
+  * https://docs.google.com/spreadsheets/d/1odMxSxcV4Hb-uYEUbfrpzasdKM8bdGr5NNydt7nj4wc/edit?usp=sharing
   * 試行回数の平均を求めていない。
   * 冗長なコードが多くみられる。
   *
