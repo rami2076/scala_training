@@ -1,4 +1,4 @@
-package tutorial.roughly_scala.base
+package tutorial.roughly_scala.base.syntax_
 
 object Control {
 

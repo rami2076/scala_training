@@ -1,4 +1,4 @@
-package tutorial.roughly_scala.base
+package tutorial.roughly_scala.base.syntax_
 
 class DefaultUser(_name: String, _age: Int) {
   val name = _name

@@ -1,6 +1,6 @@
 package test.roughly_scala.base
 
-import tutorial.roughly_scala.base.User_Field
+import tutorial.roughly_scala.base.syntax_.User_Field
 
 object Test_UserField {
   def main(args: Array[String]): Unit = {

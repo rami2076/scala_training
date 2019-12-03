@@ -1,6 +1,6 @@
 package test.roughly_scala.base
 
-import tutorial.roughly_scala.base.{DefaultUser, Profile}
+import tutorial.roughly_scala.base.syntax_.{DefaultUser, Profile}
 
 object Test_AccessAndinheritance extends App {
 

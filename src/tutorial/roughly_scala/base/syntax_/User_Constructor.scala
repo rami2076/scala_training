@@ -1,4 +1,4 @@
-package tutorial.roughly_scala.base
+package tutorial.roughly_scala.base.syntax_
 
 //コンストラクタ
 //class class名(仮引数:仮引数の型){}

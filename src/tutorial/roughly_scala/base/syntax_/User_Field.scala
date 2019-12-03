@@ -1,4 +1,4 @@
-package tutorial.roughly_scala.base
+package tutorial.roughly_scala.base.syntax_
 
 class User_Field(_name: String, _age: Int) {
   //コンストラクタの呼び出し

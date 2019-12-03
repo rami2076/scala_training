@@ -1,6 +1,4 @@
-package tutorial.roughly_scala.base
-
-//
+package tutorial.roughly_scala.base.syntax_
 
 /**
   * エントリーポイントはObject内のmain(args:Array[String]):Unitと同一のシグネチャを持つ
