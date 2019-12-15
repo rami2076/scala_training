@@ -61,7 +61,6 @@ object Defines extends App {
   //引数に関数あり。関数として変数を渡す場合。　関数を名前渡しで渡した場合。
   cls.func10("Elen", "11", nameAgePrint = cls.func5)
 
-  //
 
   //部分適用
   //プレースホルダを使用。
@@ -92,6 +91,41 @@ object Defines extends App {
   //名前付き引数を渡す方が安全
   cls.func11("25")
 
+
+  //ネストしたメソッド
+  cls.func12(name = "Hiro", age = "20")
+  cls.func16("Here.")
+  cls.func17()("Here.") //戻り値が関数なので()が続く呼び出しとなる。
+  println(cls.func17().isInstanceOf[Function1[String, Unit]]) //true
+  println(cls.func17().isInstanceOf[Function[String, Unit]]) //true
+  println(cls.func17().isInstanceOf[String => Unit]) //true
+  println(cls.func17().getClass)
+  cls.func17().apply("Here") //Function1traitを実装しているのでapplyをもっている。
+  cls.func17()("Here") //applyは省略可能。
+  val message = cls.func17() //戻りを変数に格納可能。
+  message(v1 = "here") //呼び出しは上記と同じ。
+
+  //カリー化されたメソッドの使用。
+  //applyを使用。
+  println(cls.add_6(1).apply(2).apply(3))
+  //applyを省略。
+  println(cls.add_6(1)(2)(3))
+  //オブジェクトを格納して使用。
+  val funcY = cls.add_6(1)
+  val funcZ = funcY(2)
+  val total_6 = funcZ(v1 = 3)
+  println(total_6)
+  //カリー化されたメソッドの部分適用
+  //val funcBad = cls.add_6(1)(_)(3) //Error:(119, 28) missing parameter type for expanded function ((<x$4: error>) => cls.add_6(1)(x$4)(3))
+  val funcA = cls.add_6(1)(_: Int)(3)
+  val total_A = funcA(2)
+
+  //引数リストを使用してカリー化を表現した際の呼び出し。
+  println(cls.add_1(1)(2)(3))
+  val add1_B = cls.add_1(1)(_: Int)(3) //部分適用した場合。
+  println(add1_B(2))
+  //val add1_Bad = cls.add_1(1)(_)(3) //Error:(119, 28) missing parameter type for expanded function ((<x$4: error>) => cls.add_6(1)(x$4)(3))
+  //型情報を明記しないと部分適用はできない。
 
 }
 
@@ -158,6 +192,122 @@ class Defines {
   //デフォルト引数：仮引数のデフォルト値を設定できる。
   def func11(name: String = "anonymous", age: String = "??"): Unit = println(s"My name is ${name}. ${age} old years. ")
 
+  //ネストしたメソッド
+  def func12(name: String, age: String): Unit = {
+    //定義前の呼び出し可能。
+    func13(s"My name is ${name}. ${age} old years.")
+
+    def func13(message: String): Unit = {
+      println(message)
+    }
+
+  }
+
+  //ネストしたメソッド　評価後に値を返却する場合。
+  //ネストしたメソッドの記述はカリー化するために必要だったと思われる。。
+  //func14はカリー化とは無関係。
+  def func14(name: String, age: String): Unit = {
+    def func15(message: String): Unit = {
+      println(message)
+    }
+    //ネストしたメソッドのスコープは外側のメソッドまでとなる。
+    //ネストしたメソッドを呼び出し、評価後の値を返却する場合。
+    func15(s"My name is ${name}. ${age} old years.")
+
+  }
+
+  //ネストしたメソッド　評価後に関数を返却する場合。
+  def func16: String => Unit = { //引数がなく、副作用がない場合は()を省略してもよい。
+    def func17(message: String): Unit = {
+      println(message)
+    }
+    //関数を返却する場合。
+    func17
+  }
+
+  //ネストしたメソッド　評価後に関数を返却する場合。
+  def func17() = {
+    def func17(message: String): Unit = {
+      println(message)
+    }
+    //関数を返却する場合。 関数のオブジェクト化した値の返却。　関数名+_という構文。
+    //Cの関数ポインタのイメージ
+    func17 _
+  }
+
+  //ネストしたメソッド　関数リテラル(無名関数)を使用した場合
+  def func18() = {
+    (message: String) => println(message) //関数リテラルとした場合、戻り値の型は推測される。
+  }
+
+  //ネストしたメソッド　関数リテラルで記述し式ブロックを除去した場合
+  def func19() = (message: String) => println(message) //ブロックを除去し一行にした場合。
+
+  //メソッドのカリー化--------開始
+
+  //カリー化　：複数の仮引数を持つ関数Aを単一の引数を持つ関数のチェインに変換すること。または変換された関数(カリー化された関数)　3
+  //カリー化した関数は、集合演算時時に順番に処理が記述でき簡潔に記述できる。
+  //https://kazu-yamamoto.hatenablog.jp/entry/20110906/1315279311
+  ////複数引数：カリー化の方法
+
+  //not curry
+  def add_0(x: Int, y: Int, z: Int): Int = x + y
+
+  //curry 1 引数リストを使用した場合。
+  def add_1(x: Int)(y: Int)(z: Int): Int = x + y + z
+
+  //curry 2　ネストメソッドを使用した場合：省略なし。
+  def add_2(x: Int): (Int) => ((Int) => Int) = { //addの引数：Int。戻り：Intを引数に取りIntを返却する関数。
+    def innerY(y: Int): (Int) => Int = { //Yの引数：Int。戻り：Intを引数にとり、Intを返却する関数。
+      def innerZ(z: Int): Int = { //Zの引数：Int。戻り：Int
+        x + y + z //Zが評価する式
+      }
+
+      innerZ //Yが返却する関数
+      //関数型のオブジェクトに変換して返却。
+      //戻り値の型が定義済みなので、_の記述不要。
+    }
+
+    innerY //addが返却する関数。
+  }
+
+  //curry 3　ネストメソッドを使用した場合：戻り値の型省略あり。
+  def add_3(x: Int) = {
+    def innerY(y: Int) = {
+      def innerZ(z: Int) = {
+        x + y + z
+      }
+
+      innerZ _
+      //メソッド名の後ろにアンダースコアで関数型のオブジェクトに変換される。　
+      //代入先の型が明記されている場合は、アンダースコアの記述がなくても自動変換可能。
+      //戻りの型を省略する場合は、アンダースコアが必要。
+    }
+
+    innerY _
+    //ref: https://www.ne.jp/asahi/hishidama/home/tech/scala/function.html#h_function_object
+    //ref: http://daybreaksnow.hatenablog.jp/entry/2013/10/02/185902
+  }
+
+  //curry 4　ネストメソッドを使用した場合：戻り値の型省略とZ関数を関数リテラル(無名関数)に書き換えた版
+  def add_4(x: Int) = {
+    def innerY(y: Int) = {
+      (z: Int) => x + y + z //Zを無名関数に変換。
+    }
+
+    innerY _
+  }
+
+  //curry 5　ネストメソッドを使用した場合：戻り値の型省略とY関数とZ関数を関数リテラル(無名関数)に書き換えた版
+  def add_5(x: Int) = {
+    (y: Int) => (z: Int) => x + y + z //Yも無名関数に変換。
+  }
+
+  //curry　6　ネストメソッドを使用した場合：戻り値の型省略とY関数とZ関数を関数リテラル(無名関数)に書き換え、式ブロックを除去した版
+  def add_6(x: Int) = (y: Int) => (z: Int) => x + y + z //式ブロックを削除し、一行で表現。
+
+  //メソッドのカリー化--------終了
+
 
   //以下まだちゃんと記述できていない。
   //無名関数のためのプレースホルダ構文
@@ -168,11 +318,13 @@ class Defines {
   //値クラス
   //ジェネリクス関係
   //implicit
-  //カリー化　：複数の仮引数を持つ関数Aを単一の引数を持つ関数のチェインに変換すること。または変換された関数(カリー化された関数)
-  //カリー化した関数は、集合演算時時に順番に処理が記述でき簡潔に記述できる。
-  //https://kazu-yamamoto.hatenablog.jp/entry/20110906/1315279311
-  ////複数引数：カリー化の方法
-  //部分関数
+  //case　class
+  //
+
+
+  //部分関数　2
+
+
   //関数の部分適用：複数の仮引数を持つ関数の呼び出しを行う際に一つ以上の引数の値を束縛できる。関数内の変数が束縛された関数が返却される。
   //※部分適用する仮引数は、関数や値などの第一級オブジェクトです。
   //※関数を返却する関数の表現の一つ。
@@ -181,13 +333,20 @@ class Defines {
   //抽出子
   //反変・非変・変位指定
   //文字列の補完
-  //ネストしたメソッド　まずはこれっぽい。
+
   //topic-----開始
   //関数とメソッドの違い
   //https://qiita.com/FScoward/items/926aa29cc1f8e4873e6a
   //http://tkawachi.github.io/blog/2014/11/26/1/
   //https://stackoverflow.com/questions/2529184/difference-between-method-and-function-in-scala
   //topic-----終了
+
+  //見る
+  //https://www.slideshare.net/AoiroAoino/scala-79575940
+  //キーワード関数 変数 違い scala
+
+  //マクロ
+  //システムコマンドの実行
 
 
 }
