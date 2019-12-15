@@ -4,7 +4,6 @@ import scala_d_text.class_.call_by_name.CallByName
 import scala_d_text.class_.call_by_name_global.CallByNameGlobal
 import scala_d_text.class_.call_by_value.CallByValue
 
-
 /**
  *
  * メソッドのカリー化(Curryingまたは、カリー化された=curried)について
@@ -97,7 +96,7 @@ object Defines extends App {
   cls.func16("Here.")
   cls.func17()("Here.") //戻り値が関数なので()が続く呼び出しとなる。
   println(cls.func17().isInstanceOf[Function1[String, Unit]]) //true
-  println(cls.func17().isInstanceOf[Function[String, Unit]]) //true
+  println(x = cls.func17().isInstanceOf[Function[String, Unit]]) //true
   println(cls.func17().isInstanceOf[String => Unit]) //true
   println(cls.func17().getClass)
   cls.func17().apply("Here") //Function1traitを実装しているのでapplyをもっている。
@@ -109,7 +108,7 @@ object Defines extends App {
   //applyを使用。
   println(cls.add_6(1).apply(2).apply(3))
   //applyを省略。
-  println(cls.add_6(1)(2)(3))
+  println(cls.add_6(x = 1)(2)(3)) //ネストされたメソッドを使用する場合は、名前付き引数は一つ目以降使用できない。
   //オブジェクトを格納して使用。
   val funcY = cls.add_6(1)
   val funcZ = funcY(2)
@@ -117,15 +116,64 @@ object Defines extends App {
   println(total_6)
   //カリー化されたメソッドの部分適用
   //val funcBad = cls.add_6(1)(_)(3) //Error:(119, 28) missing parameter type for expanded function ((<x$4: error>) => cls.add_6(1)(x$4)(3))
-  val funcA = cls.add_6(1)(_: Int)(3)
-  val total_A = funcA(2)
+  val funcA = cls.add_6(x = 1)(_: Int)(3) //名前付き引数は一つ目以降使用できない。
+  val total_A = funcA(v1 = 2)
 
   //引数リストを使用してカリー化を表現した際の呼び出し。
-  println(cls.add_1(1)(2)(3))
+  println(cls.add_1(x = 1)(y = 2)(z = 3)) //名前付き引数を使用できる。
   val add1_B = cls.add_1(1)(_: Int)(3) //部分適用した場合。
   println(add1_B(2))
   //val add1_Bad = cls.add_1(1)(_)(3) //Error:(119, 28) missing parameter type for expanded function ((<x$4: error>) => cls.add_6(1)(x$4)(3))
   //型情報を明記しないと部分適用はできない。
+
+
+  //部分適用について
+
+  //関数の部分適用：複数の仮引数を持つ関数の呼び出しを行う際に一つ以上の引数の値を束縛できる。関数内の変数が束縛された関数が返却される。
+  //※部分適用する仮引数は、関数や値などの第一級オブジェクトです。
+  //※関数を返却する関数の表現の一つ。
+  //https://kazu-yamamoto.hatenablog.jp/entry/20110906/1315279311
+  //https://docs.scala-lang.org/tour/currying.html#inner-main
+  //https://docs.scala-lang.org/glossary/#partially-applied-function
+  //英訳：partially applied function
+
+  //カリー化していない関数の部分適用。
+  //※部分適用なし
+  println(cls.add_0(1, 1, 1))
+  //※部分適用1
+  val partFunc_A = cls.add_0(1, _, 1) //型省略。
+  println(partFunc_A(1))
+  //※部分適用2
+  val partFunc_B = cls.add_0(1, _: Int, 1) //型明記。
+  println(partFunc_B(1))
+  //部分適用3
+  val partFunc_C = cls.add_0(2, _, _) //型を明記せず、部分適用の実行可能。
+  val partFunc_D = partFunc_C(2, _)
+  println(partFunc_C.getClass)
+  println(partFunc_D(2))
+
+
+  //カリー化された関数の部分適用。
+  //部分適用1
+  //val partFunc_Bad = cls.add_6(1)(_)(1) //カリー化されたメソッドの戻り値の関数の型情報は拡張された関数として扱われ、型情報は消去されているためエラーが発生する。
+  //Error:(150, 35) missing parameter type for expanded function ((<x$8: error>) => cls.add_6(1)(x$8)(1))
+  //expanded functionについては下記参照。TL;TR eta-expansion　イータ拡張されたメソッドをexpanded function呼ぶ。expanded functionはFunctionN-Traitを実装したメソッド(SAMクラス)のこと。
+  //https://docs.scala-lang.org/sips/minutes/2019-03-13-sip-minutes.html#eta-expansion
+  //部分適用2
+  val partFunc_Good = cls.add_6(1)(_: Int)(1) //カリー化されたメソッドは型情報を明記することで部分適用が可能。
+  println(partFunc_Good.getClass)
+  println(partFunc_Good(v1 = 1))
+
+  //カリー化された関数とカリー化されていない関数では、部分適用の実装が異なる。
+  //カリー化された関数もカリー化されていない関数も部分適用は可能。
+  //部分適用はは、値が束縛された関数や値を返却するため、初めに定義した式に型が記述している場合としていない場合で部分適用時の記述が異なる。
+  println(partFunc_D.isInstanceOf[Int => Int])
+  println(partFunc_Good.isInstanceOf[Int => Int])
+  println(partFunc_A.isInstanceOf[Function1[Int, Int]]) //3引数の内、1引数が束縛された場合、カリー化された関数が戻ってくる。
+  println(partFunc_Good.isInstanceOf[Function1[Int, Int]])
+  //リフレクションの検証は後日。
+  //http://xerial.org/scala-cookbook/recipes/2013/02/01/reflection
+
 
 }
 
@@ -251,7 +299,7 @@ class Defines {
   ////複数引数：カリー化の方法
 
   //not curry
-  def add_0(x: Int, y: Int, z: Int): Int = x + y
+  def add_0(x: Int, y: Int, z: Int): Int = x + y + z
 
   //curry 1 引数リストを使用した場合。
   def add_1(x: Int)(y: Int)(z: Int): Int = x + y + z
@@ -325,10 +373,6 @@ class Defines {
   //部分関数　2
 
 
-  //関数の部分適用：複数の仮引数を持つ関数の呼び出しを行う際に一つ以上の引数の値を束縛できる。関数内の変数が束縛された関数が返却される。
-  //※部分適用する仮引数は、関数や値などの第一級オブジェクトです。
-  //※関数を返却する関数の表現の一つ。
-  //https://kazu-yamamoto.hatenablog.jp/entry/20110906/1315279311
   //コンテキスト圧縮
   //抽出子
   //反変・非変・変位指定
