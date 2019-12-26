@@ -125,6 +125,7 @@ object Defines extends App {
   println(add1_B(2))
   //val add1_Bad = cls.add_1(1)(_)(3) //Error:(119, 28) missing parameter type for expanded function ((<x$4: error>) => cls.add_6(1)(x$4)(3))
   //型情報を明記しないと部分適用はできない。
+  //http://komaken.me/blog/2015/06/05/scala%E3%81%AEeta-expansion%E3%81%A3%E3%81%A6%E3%81%AA%E3%82%93%E3%81%AA%E3%81%AE%E3%81%8B%E3%82%88%E3%81%86%E3%82%84%E3%81%8F%E3%82%8F%E3%81%8B%E3%81%A3%E3%81%9F/
 
 
   //部分適用について
@@ -159,6 +160,7 @@ object Defines extends App {
   //Error:(150, 35) missing parameter type for expanded function ((<x$8: error>) => cls.add_6(1)(x$8)(1))
   //expanded functionについては下記参照。TL;TR eta-expansion　イータ拡張されたメソッドをexpanded function呼ぶ。expanded functionはFunctionN-Traitを実装したメソッド(SAMクラス)のこと。
   //https://docs.scala-lang.org/sips/minutes/2019-03-13-sip-minutes.html#eta-expansion
+  //http://komaken.me/blog/2015/06/05/scala%E3%81%AEeta-expansion%E3%81%A3%E3%81%A6%E3%81%AA%E3%82%93%E3%81%AA%E3%81%AE%E3%81%8B%E3%82%88%E3%81%86%E3%82%84%E3%81%8F%E3%82%8F%E3%81%8B%E3%81%A3%E3%81%9F/
   //部分適用2
   val partFunc_Good = cls.add_6(1)(_: Int)(1) //カリー化されたメソッドは型情報を明記することで部分適用が可能。
   println(partFunc_Good.getClass)
@@ -171,9 +173,8 @@ object Defines extends App {
   println(partFunc_Good.isInstanceOf[Int => Int])
   println(partFunc_A.isInstanceOf[Function1[Int, Int]]) //3引数の内、1引数が束縛された場合、カリー化された関数が戻ってくる。
   println(partFunc_Good.isInstanceOf[Function1[Int, Int]])
-  //リフレクションの検証は後日。
+  //TODO::リフレクションの検証は後日。
   //http://xerial.org/scala-cookbook/recipes/2013/02/01/reflection
-
 
 }
 
@@ -243,6 +244,8 @@ class Defines {
   //ネストしたメソッド
   def func12(name: String, age: String): Unit = {
     //定義前の呼び出し可能。
+    //ネストしたメソッドをローカル関数と呼ぶ。
+    //https://docs.scala-lang.org/glossary/#local-function
     func13(s"My name is ${name}. ${age} old years.")
 
     def func13(message: String): Unit = {
@@ -358,9 +361,9 @@ class Defines {
 
 
   //以下まだちゃんと記述できていない。
-  //無名関数のためのプレースホルダ構文
+  //無名関数のためのプレースホルダ構文　その次
   //http://kmizu.github.io/scala-kansai-summit-2017/#/
-  //クロージャ
+  //クロージャ　その次の次
   //スコープ
   //リテラル
   //値クラス
@@ -368,9 +371,6 @@ class Defines {
   //implicit
   //case　class
   //
-
-
-  //部分関数　2
 
 
   //コンテキスト圧縮
@@ -488,5 +488,172 @@ package call_by_name_global {
 
 
   }
+
+}
+
+
+//部分関数とは
+//部分関数は、数学用語に由来する言葉。
+//関数を分類する際の言葉。
+//まず、関数について記載する。
+//関数は写像とも呼ばれている。
+//数学の世界では写像と関数に調べた限り違いなく使われているようだが、
+//関数それ自体を論じる圏論の世界では一般に写像という言葉が使用されているため写像という言葉を使用する。
+//圏論(category theory)は数学的構造とその間の関係を抽象的に扱う数学理論の一つ。
+//対象(object)と射(morphism,arrow)で構成される圏(category)が論の対象。
+//集合Aと集合Bが与えられたとき集合Aの各元に対して、集合B元がただ一つ指定するような規則fが与えられる時、定義域Aから終域Bへの写像という。
+//以下のように記述する
+//ｆ：A->B
+//矢印は射(arrow,morphism)
+//AやBを対象(object)
+//写像は英語でmapping,mapフランス語でapplication
+//写像の同義語として関数、変換、作用素、射と呼ぶ。
+//The words map or mapping, transformation, correspondence, and operator are often used synonymously.
+//
+//------#1解釈開始
+//ここまでを簡単に解釈すると集合Aの各要素は集合Bの要素の一つに変換できる場合、射があるといえる。
+//------#1解釈終わり
+//
+//------#2断り開始
+//ここから話が飛びます。とくに写像であるための規則を飛ばす。
+//写像には対象と射の関係性により全射や単射、全単射や逆写像という分類があるがこれについての説明も割愛。
+//------#2断り終わり
+
+//------#3部分写像について開始
+//部分写像はpartial mapping　あるいは、部分関数partial functionと英語で表現する。
+//scalaで出てくる部分関数はここが由来であると思われる。
+//集合A,Bがあり、射fがfであるとした場合に以下であると定義できた。
+//ｆ：A->B
+//部分写像は、定義域A内の任意の部分集合A'の各元が終域Bの元に変換できる射を要求する。
+// 任意の部分集合を特に値域と呼ぶ。
+//定義域A内の任意の部分集合A`=Aである場合は、全域写像と呼ぶ。
+//------#3部分写像について終了
+
+//補足開始　元について
+//元とは数学の集合で出てくる用語。
+//集合内の要素を元と呼ぶ。
+//英語ではelement
+//補足終わり
+
+//##解釈開始
+//定義域の範囲が決まっていて終域の元に変換できる場合に部分関数と呼ぶと解釈できる。
+//##解釈終わり
+
+//集合について
+//集合についても規則があるが、ここでは割愛。
+
+//##上記の解釈を関数にscalaの関数に置き換える。
+//まず以下の式について圏論の用語自分なりに置き換える。
+//関数1:def f(x:Int):Int = {x+1}
+//仮引数xはIntの集合である定義域
+//式{x+1}または関数fは射
+//戻り値はInt型の集合であり、終域はInt範囲内に像をmappingする関数と読み取れる。
+//上記は仮引数に対して制限をかけていないため、全域写像であると解釈できる。
+//関数2:def f2(x:Int):Int = {x match {
+// case i if (i > -1 && i < 101 )  => 1 + i
+// case _ => new Exception
+// }
+//}
+//関数2:f2は射
+//仮引数xはIntの集合である定義域
+//射に与えられた対象の元は、定義域に対して0以上100以下の制限が要求される。
+//定義域の内、制限範囲内の元の集合を値域と呼ぶ。
+//値域には射が適用され、終域の各元が存在する。
+//終域は、Intの集合範囲内である捉えられる。
+//##scalaへの置き換えを終了。
+
+//#まとめ
+//つまり、抗議には部分写像はプロダクトの仕様と関数の作り方次第で普通に登場する関数のひとつの表現方法。
+//#
+
+//# 部分関数PartialFunctionというライブラリ。
+//以下は、scalaに登場する部分関数について記述していく。
+//上記で説明した部分写像の構造を表現するためにtraitとしてPartialFunctionが存在する。
+//PartialFunctionはscalaで定義されているtraitであり、日本語訳で部分関数と呼ぶ。
+//以下部分関数と記述する場合はscalaのライブラリ内のtraitのことである。
+//関数2は部分写像の構造を持つ関数であった。
+//しかし、呼び出しを行う際に例外が発生する場合がありすこしばかり使いにくい場合がある。
+//PartialFunctionを実装すると、上記の値域範囲内かどうかを事前に検査する必要があることをtrait名から示すことができ、かつ
+//例外の発生も抑止しより使いやすく読み取りやすい状態となる。
+//また、Scalaのもととなった言語である、Haskellなどの関数型言語には部分関数をサポートした機能が存在するため、機能として標準で備えているのではないかと考えました。
+//事前にチェックするためのメソッドを実装する必要があると考えると思いますが、コンパイラが解釈して実装するため、簡易な記述で安全に定義することができる点がPartialFunctionの良い点がと考えます。
+//実際には下記のように記述します。
+
+
+//注意：部分関数は部分適用とは全く別の概念。
+
+
+package partial_function {
+
+  object Partial extends App {
+    val partial: PartialFunction[Int, Int] = {
+      //無名クラスの作成のような記述方法だが、少し異なる。
+      //コンパイラが独自解釈してメソッドを生成する。
+      case i if (i > -1 && i < 101) => 1 + i //値域のみ定義
+      //複数のcase式を記述可能。
+    }
+    val x = 1
+    partial.isDefinedAt(x) match { //isDefinedAtは値域内であるかの判定を行うメソッドとなる。case文の条件文を使用してコンパイラが作成する。
+      case true => println(partial(x)) //Function1のtraitの実装がcase式部となり、applyメソッドを呼び出している。
+      case false => println(s"写像partialは元:${x}において定義されない")
+    }
+    //isDefinedAt
+    //applyは自分で実装してもよいがコンパイラが実装してくれるので実行速度がシビアでない限り任せて問題ないと考える。
+    //TODO::自分で実装した場合の記述は割愛。
+
+    val y = 101
+    partial.isDefinedAt(y) match {
+      case true => println(partial(y))
+      case false => println(s"写像partialは元:${y}において定義されない")
+    }
+    //部分関数はコレクションに対しても使用することができる。
+    val numbers = Seq(-1, 0, 1, 2, 3, 99, 100, 101, 102)
+    numbers.filter { //()は{}に置き換えが可能。
+      //partial.isDefinedAt(_)
+      partial.isDefinedAt //s補完子を使用しない場合は自明な引数は省略可能。(無名関数のためのプレースホルダーの省略)
+    }.map { i => s"元:${i},像:${partial(i)}"
+      //}.map { i => s"元:${i},像:${partial}"// s補完子を使用した場合、partial(i)のiは自明でないと判断されるため、applyの呼び出しではなく、toStringが呼び出される。
+      //_error: unbound placeholder parameter　ラムダ式の記述を使用せず、無名関数のためのプレースホルダー記述を使用した場合、s補完子が機能しない。
+
+
+    } foreach (println(_)) //}.foreachはスペースに変換可能。
+
+    //PartialFunctionのその他の機能について
+    //圏の合成 orElse andThen　compose
+    //atomicな式の実行 applyOrElse　値域に定義されている場合は射を実行し、そうでない場合は、第二引数を返却する
+    //不明： elementWise
+    //Function1に適用された関数部を提供する　lift
+    //不明：runWith
+    //toString
+    //matchで対象の元を返却。　unapply
+
+
+    //初期化方法2 以下のように無名クラスのように実装することもできる。
+    val pf = new PartialFunction[Int, Int] {
+      override def isDefinedAt(x: Int): Boolean = x > 0 && x <= 100
+
+      //Function1のtraitメンバ
+      override def apply(v1: Int): Int = x + 1
+    }
+
+  }
+
+  //部分関数に関するリンク集
+  /*
+  [ゆるヨロさんによる紹介記事](https://yuroyoro.hatenablog.com/entry/20100705/1278328898)
+  [hishidamaさんPartialFunction](https://www.ne.jp/asahi/hishidama/home/tech/scala/function.html#h_PartialFunction)
+  [写像wikipedia](https://ja.wikipedia.org/wiki/%E5%86%99%E5%83%8F)
+  [部分写像wikipedia](https://ja.wikipedia.org/wiki/%E9%83%A8%E5%88%86%E5%86%99%E5%83%8F)
+  [scalaDocの準ドキュメント](https://docs.scala-lang.org/overviews/quasiquotes/expression-details.html#partial-function)
+  [Haskell wikipedia](https://ja.wikipedia.org/wiki/Haskell)
+  [関数PDF](http://www.cs.tsukuba.ac.jp/~kam/lecture/discrete2010/text/3.pdf)
+  [PartialFunctionAPI](https://www.scala-lang.org/api/current/scala/PartialFunction.html)
+  [Scala標準ライブラリドキュメント](https://scala-lang.org/files/archive/spec/2.13/12-the-scala-standard-library.html)
+  [ももやまさんの離散数学に関する解説](https://www.momoyama-usagi.com/entry/math/risan06#2-%E9%83%A8%E5%88%86%E9%96%A2%E6%95%B0%E9%83%A8%E5%88%86%E5%86%99%E5%83%8F)
+  [PartialFunctionのインスタンス生成の謎について(コンパイラによる実装について)](https://gist.github.com/xuwei-k/1223693)
+  [scalaドキュメント内の部分関数という言葉がある文書](https://docs.scala-lang.org/ja/tour/extractor-objects.html)
+  [記述例](https://www.geeksforgeeks.org/partial-functions-in-scala/)
+  [PartialFunction記述例2](https://alvinalexander.com/scala/how-to-define-use-partial-functions-in-scala-syntax-examples)
+   */
 
 }

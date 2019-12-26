@@ -8,4 +8,6 @@
 - [Scalaの関数](http://tkawachi.github.io/blog/2014/11/26/1/)
 - [apply・unapply・case classの整理](https://qiita.com/someone7140/items/1f324bfe7e07d840776a)
 - [protected classを使用したクラスの例](https://github.com/apache/kafka/blob/0.10.2.2/core/src/main/scala/kafka/admin/ConsumerGroupCommand.scala#L138)
-
+- [Scalaで学ぶ言語設計](https://pafelog.net/fava.pdf)
+- [圏と関手](http://www.math.s.chiba-u.ac.jp/~matsu/math/category.pdf)
+- [関数型言語入門](https://www.slideshare.net/shizone?utm_campaign=profiletracking&utm_medium=sssite&utm_source=ssslideview)
